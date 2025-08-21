@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+  <title>Stories</title>
+  <style>
+    /* For iOS Safari */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Android Chrome and others supporting standard property */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    .story-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    .story-image {
+      width: 100%;
+      height: 96%;
+      object-fit: cover;
+    }
+
+    .progress-bars {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .bar {
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bar.active::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      background: white;
+      animation: fill 5s linear forwards;
+    }
+
+    @keyframes fill {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    .story-header {
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .profile-pic {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .music-info {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .bottom-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0px;
+      right: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: black;
+      padding: 2px 0px;
+    }
+
+    .viewers-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 20px;
+}
+
+.viewers {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+
+}
+
+.viewer-pic {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid black;
+  margin-left: -10px; /* overlap effect */
+  background-color: black; /* to prevent transparency issues */
+  z-index: 1;
+}
+
+.viewer-pic:first-child {
+  margin-left: 0;
+  z-index: 1;
+}
+
+.viewer-pic:nth-child(2) {
+  z-index: 2;
+}
+
+.viewer-pic:nth-child(3) {
+  z-index: 3;
+}
+
+.activity-label {
+  color: white;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+
+    .actions {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .action-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.action-icon img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+
+    .footer-bar {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      background-color: red;
+    }
+.viewers {
+  display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+.viewers:active {
+  transform: scale(0.95);
+}
+    
+  </style>
+</head>
+<body>
+
+<div class="story-container">
+  <img src="https://exstasyclothing.com/profilezapp/image/1.jpg" alt="Story" class="story-image">
+
+  <div class="progress-bars">
+    <div class="bar"></div>
+    
+  </div>
+
+  <div class="story-header">
+    <img src="https://randomuser.me/api/portraits/men/75.jpg" class="profile-pic" alt="user">
+    <div>
+      <strong>the_success_hack3</strong> · 22h<br>
+      <span class="music-info">🎵 Central Cee, Dave - CRG</span>
+    </div>
+  </div>
+
+  
+
+  <div class="bottom-bar">
+    <div class="viewers-section">
+    <a href="view.html">
+    <div class="viewers">
+    <img src="https://randomuser.me/api/portraits/women/10.jpg" class="viewer-pic">
+    <img src="https://randomuser.me/api/portraits/men/12.jpg" class="viewer-pic">
+    <img src="https://randomuser.me/api/portraits/women/14.jpg" class="viewer-pic">
+  </div> </a>
+  <div class="activity-label">Activity</div>
+</div>
+
+    <div class="actions">
+      <div class="action-icon">
+        <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/whatsapp-white-icon.png" alt="whatsapp">Share
+      </div>
+      <div class="action-icon">
+        <img src="https://i.imgur.com/ssUQnGR.png" alt="whatsapp">Boost
+      </div>
+      <div class="action-icon">
+        <img src="https://i.imgur.com/WZv2JKN.png" alt="boost">send
+      </div>
+      <div class="action-icon">
+        <img src="https://i.imgur.com/e7lNvpe.png" alt="mention">Mention
+      </div>
+      <div class="action-icon">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxHtvJZDfjGIGhYsPPMa-hDb0lSi_5-aiCJA&s" alt="more">More
+      </div>
+    </div>
+  </div>
+
+  
+</div>
+
+
+<script>
+  const stories = [
+    {
+      image: "https://exstasyclothing.com/profilezapp/image/1.jpg",
+      profile: "https://i.ibb.co/hps8vwC/503570226-17906625231157799-5752227741181345417-n-modified.png",
+      username: "hindu_artcreator",
+      time: "22h",
+      music: "🎵 Central Cee, Dave - CRG"
+    },
+    
+  ];
+
+  // Append a cache-busting parameter
+  stories.forEach(story => {
+    const randomParam = Date.now(); // or Math.random()
+    story.image = story.image + "?v=" + randomParam;
+  });
+
+  console.log(stories);
+
+  let currentIndex = 0;
+  const storyImage = document.querySelector(".story-image");
+  const profilePic = document.querySelector(".profile-pic");
+  const username = document.querySelector(".story-header strong");
+  const time = document.querySelector(".story-header div").childNodes[2];
+  const musicInfo = document.querySelector(".music-info");
+  const bars = document.querySelectorAll(".bar");
+
+  function showStory(index) {
+    const story = stories[index];
+    storyImage.src = story.image;
+    profilePic.src = story.profile;
+    username.textContent = story.username;
+    time.textContent = ` · ${story.time}`;
+    musicInfo.textContent = story.music;
+
+    // Update progress bars
+    bars.forEach((bar, i) => {
+      bar.classList.remove("active");
+      bar.innerHTML = ""; // Reset animation
+      if (i === index) {
+        bar.classList.add("active");
+        bar.innerHTML = "<div></div>"; // Needed to retrigger animation
+      }
+    });
+  }
+
+  function nextStory() {
+    currentIndex++;
+    if (currentIndex < stories.length) {
+      showStory(currentIndex);
+    } else {
+      // Optionally loop: currentIndex = 0;
+      console.log("End of stories");
+    }
+  }
+
+  // Start slideshow
+  showStory(currentIndex);
+  setInterval(() => {
+    if (currentIndex < stories.length - 1) {
+      nextStory();
+    }
+  }, 5000); // Each story lasts 5 seconds
+</script>
+
+</body>
+</html>

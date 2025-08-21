@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editable Page</title>
+  <style>
+    /* For iOS Safari */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Android Chrome and others supporting standard property */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f9f9f9;
+    }
+    .editable {
+      border: 1px dashed #ccc;
+      padding: 10px;
+      margin-bottom: 1rem;
+      background: #fff;
+      cursor: text;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 1rem;
+    }
+    input[type="url"] {
+      padding: 5px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Editable Text:</h2>
+  <div class="editable" contenteditable="true">
+    This is some editable text. Click to edit me.
+  </div>
+
+  <h2 contenteditable="true">Replaceable Image:</h2>
+  <img id="editableImage" src="https://via.placeholder.com/400x200" alt="Editable Image"/>
+
+  <label for="imageUrl">Change Image URL:</label>
+  <input type="url" id="imageUrl" placeholder="Enter new image URL and press Enter"/>
+
+  <script>
+    const imageInput = document.getElementById('imageUrl');
+    const editableImage = document.getElementById('editableImage');
+
+    imageInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const newUrl = imageInput.value.trim();
+        if (newUrl) {
+          editableImage.src = newUrl;
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Story Views with Skeleton Loader</title>
+<style>
+   /* For iOS Safari */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Android Chrome and others supporting standard property */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .story-strip {
+      background-color: #f1f1f1;
+      display: flex;
+      overflow-x: auto;
+      padding: 12px 10px;
+      gap: 10px;
+      border-bottom: 1px solid #ddd;
+      justify-content: center;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .story-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .story {
+      flex: 0 0 auto;
+      position: relative;
+      width: 80px;
+      height: 140px;
+    }
+
+    .story img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .views {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 2px 6px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    .boost {
+      padding: 19px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+    /*  border-bottom: 1px solid #eee; */
+      cursor: pointer;
+    }
+
+    .section-title {
+      padding: 12px 16px 4px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .viewer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      /*border-bottom: 1px solid #eee;*/
+    }
+
+    .viewer-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .viewer-info img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .viewer-details {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+
+    .viewer-details .username {
+      font-weight: 500;
+    }
+
+    .viewer-details .name {
+      color: gray;
+      font-size: 13px;
+    }
+
+    .viewer-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+    }
+
+    .reaction {
+      font-size: 16px;
+    }
+
+    .icon {
+      cursor: pointer;
+    }
+
+    .viewer-tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+.tab-group {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 6px;
+  color: #007bff;
+}
+
+.tab-underline {
+  height: 2px;
+  background-color: #007bff;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.trash .tab-icon {
+  width: 22px;
+  height: 22px;
+}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff;
+    color: #000;
+  }
+
+  /* Skeleton overlay */
+  #skeleton-overlay {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Skeleton shapes */
+  .skeleton-story-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  .skeleton-story {
+    width: 80px;
+    height: 140px;
+    border-radius: 10px;
+  }
+  .skeleton-line {
+    height: 20px;
+    margin-bottom: 10px;
+  }
+  .skeleton-viewer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  .skeleton-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+  }
+  .skeleton-text {
+    flex: 1;
+  }
+  .skeleton-small-line {
+    height: 14px;
+    width: 60%;
+    margin-bottom: 6px;
+  }
+  .skeleton-tiny-line {
+    height: 12px;
+    width: 40%;
+  }
+</style>
+</head>
+<body>
+
+<!-- Skeleton Overlay -->
+<div id="skeleton-overlay">
+  <div class="skeleton-story-strip">
+    <div class="skeleton skeleton-story"></div>
+    <div class="skeleton skeleton-story"></div>
+    <div class="skeleton skeleton-story"></div>
+  </div>
+  <div class="skeleton-line skeleton" style="width: 40%; height: 24px; margin: 16px 0;"></div>
+  <div class="skeleton-viewer">
+    <div class="skeleton skeleton-avatar"></div>
+    <div class="skeleton-text">
+      <div class="skeleton skeleton-small-line"></div>
+      <div class="skeleton skeleton-tiny-line"></div>
+    </div>
+  </div>
+  <div class="skeleton-viewer">
+    <div class="skeleton skeleton-avatar"></div>
+    <div class="skeleton-text">
+      <div class="skeleton skeleton-small-line"></div>
+      <div class="skeleton skeleton-tiny-line"></div>
+    </div>
+  </div>
+  <div class="skeleton-viewer">
+    <div class="skeleton skeleton-avatar"></div>
+    <div class="skeleton-text">
+      <div class="skeleton skeleton-small-line"></div>
+      <div class="skeleton skeleton-tiny-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Original Page Content -->
+<div id="main-content">
+  <!-- Paste your full original HTML here -->
+ 
+  <!-- Story Thumbnails -->
+ <div class="story-strip">
+  <div class="story" style="height: 220px; width: auto;">
+    <img src="https://exstasyclothing.com/profilezapp/image/1.jpg" alt="Story 1">
+    <div class="views" contenteditable="true">
+      <img src="https://i.ibb.co/Ng52jBZ8/white-user-member-guest-icon-png-image-701751695037005zdurfaim0y-removebg-preview-1.png" alt="eye icon" style="width: 16px; vertical-align: middle; margin-right: 4px;">
+      12K
+    </div>
+  </div>
+
+  <div class="story" style="margin-top: 2%;">
+    <img src="https://exstasyclothing.com/profilezapp/image/2.jpg" alt="Story 2">
+    <div class="views" contenteditable="true">
+      
+      
+    </div>
+  </div>
+
+
+</div>
+
+
+  <!-- Viewer Tab Navigation -->
+<div class="viewer-tabs">
+  <div class="tab-group">
+    <a href="stats.html" class="tab-link">
+    <div class="tab">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy6E57QJ_7_hMnkLf1FjY_I5yq4u5VIjppseMVF9JPzijQPIFJUdxE0GQS1fN0Ils5zVE&usqp=CAU" alt="Stats" class="tab-icon">
+    </div>
+    </a>
+    <div class="tab active">
+      <!-- <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="Viewers" class="tab-icon"> -->
+      <!-- <img src="https://i.ibb.co/MkqNkG49/view-1.png" alt="Viewers" class="tab-icon"> -->
+      <img src="https://i.ibb.co/TDTyVW4H/view.png" alt="Viewers" class="tab-icon">
+      
+      <span class="tab-label" contenteditable="true">12K</span>
+      <div class="tab-underline"></div>
+    </div>
+  </div>
+  <div class="tab trash">
+    <a href="https://exstasyclothing.com/profilezapp/" class="tab-link">
+    <img src="https://cdn-icons-png.flaticon.com/512/3096/3096673.png" alt="Delete" class="tab-icon"></a>
+  </div>
+</div>
+
+<div class="123" id="my-section">
+<!-- Boost Button -->
+  <div class="boost">
+    <img class="icon" src="https://i.ibb.co/s9V07jcJ/arrow-upward-icon-set-vector-260nw-2592513801.jpg" alt="Send" width="35" height="auto"> <span>Boost this story</span>
+  </div>
+
+  <!-- Viewers -->
+  <div class="section-title">Who viewed your story</div>
+
+  <!-- Viewers List -->
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pravatar.cc/42?img=1" alt="User 1">
+      <div class="viewer-details">
+        <span class="username" contenteditable="true">im_shadab_ahmad_</span>
+        <span class="name" contenteditable="true">محمد رشاد عباسى 🌹</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/1200x/e7/c3/5d/e7c35d9f17aff2ee8b2e5b026ace822a.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">ravi1293</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pravatar.cc/42?img=3" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">harsha.social</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/57/ea/d9/57ead9d8dff311648946ccc8d3564ee4.jpg" alt="User 1">
+      <div class="viewer-details">
+        <span class="username">im_shadab_ahmad_</span>
+        <span class="name">محمد رشاد عباسى 🌹</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/24/02/ad/2402adb79f126145fa29b49899ec9890.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">lalit_kumar_noida</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/c6/22/4b/c6224b10055b50dc867b25c088320248.jpg" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">_thar_lover</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/24/02/ad/2402adb79f126145fa29b49899ec9890.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">lalit_kumar_noida</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/c6/22/4b/c6224b10055b50dc867b25c088320248.jpg" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">_thar_lover</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/24/02/ad/2402adb79f126145fa29b49899ec9890.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">lalit_kumar_noida</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/c6/22/4b/c6224b10055b50dc867b25c088320248.jpg" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">_thar_lover</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pravatar.cc/42?img=1" alt="User 1">
+      <div class="viewer-details">
+        <span class="username" contenteditable="true">im_shadab_ahmad_</span>
+        <span class="name" contenteditable="true">محمد رشاد عباسى 🌹</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/1200x/e7/c3/5d/e7c35d9f17aff2ee8b2e5b026ace822a.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">ravi1293</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pravatar.cc/42?img=3" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">harsha.social</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/57/ea/d9/57ead9d8dff311648946ccc8d3564ee4.jpg" alt="User 1">
+      <div class="viewer-details">
+        <span class="username">im_shadab_ahmad_</span>
+        <span class="name">محمد رشاد عباسى 🌹</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/24/02/ad/2402adb79f126145fa29b49899ec9890.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">lalit_kumar_noida</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/c6/22/4b/c6224b10055b50dc867b25c088320248.jpg" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">_thar_lover</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/24/02/ad/2402adb79f126145fa29b49899ec9890.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">lalit_kumar_noida</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/c6/22/4b/c6224b10055b50dc867b25c088320248.jpg" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">_thar_lover</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/24/02/ad/2402adb79f126145fa29b49899ec9890.jpg" alt="User 2">
+      <div class="viewer-details">
+        <span class="username">lalit_kumar_noida</span>
+        <span class="name">Ravi Singh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      <img src="https://i.pinimg.com/736x/c6/22/4b/c6224b10055b50dc867b25c088320248.jpg" alt="User 3">
+      <div class="viewer-details">
+        <span class="username">_thar_lover</span>
+        <!-- <span class="name">sharon 💖</span> -->
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <!-- <span class="reaction">💖</span> -->
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+ 
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  setTimeout(function() {
+    document.getElementById("skeleton-overlay").style.display = "none";
+  }, 3000); // 3 seconds delay
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,909 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+  <title>Story Views</title>
+  <style>
+    /* For iOS Safari */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Android Chrome and others supporting standard property */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .story-strip {
+position : sticky;
+top:0px;
+z-index: 999;
+      background-color: #f1f1f1;
+      display: flex;
+      overflow-x: auto;
+      padding: 65px 0 0 0;
+      gap: 5px;
+      border-bottom: 1px solid #ddd;
+      justify-content: center;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+       height: 205px;
+    }
+
+    
+    .top-left-icon, .top-right-icon {
+  position: absolute;
+  top: 8px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+.top-left-icon {
+  left: 8px;
+}
+
+.top-right-icon {
+  right: 8px;
+}
+
+    .story-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .story {
+      flex: 0 0 auto;
+      position: relative;
+      width: 80px;
+      height: 140px;
+    }
+
+    .story img {
+      width: 69%;
+      height: 69%;
+      object-fit: cover;
+      border-radius: 10px;
+      bottom: 2px ;
+      top: 2px;
+       
+    }
+
+    .views {
+      position: absolute;
+      bottom: -0px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.0);
+      color: #fff;
+      padding: -1px 6px;
+      font-size: 12px;
+     border-radius: 8px;
+ text-shadow: 
+    0px 1px 1px rgba(0, 0, 0, 0.5),
+    0px 1px 3px rgba(0, 0, 0, 0.4); /* मल्टीपल शैडो */
+
+    }
+
+    .boost {
+      padding: 19px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+    /*  border-bottom: 1px solid #eee; */
+      cursor: pointer;
+    }
+
+    .section-title {
+      padding: 12px 16px 4px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .viewer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      /*border-bottom: 1px solid #eee;*/
+    }
+
+    .viewer-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .viewer-info img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-right: 0px;
+    }
+
+    .viewer-details {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      padding-left: 10px;
+    }
+
+    .viewer-details .username {
+      font-weight: 500;
+    }
+
+    .viewer-details .name {
+      color: gray;
+      font-size: 13px;
+    }
+
+    .viewer-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+    }
+
+    .reaction {
+      font-size: 16px;
+    }
+
+    .icon {
+      cursor: pointer;
+    }
+
+   .viewer-tabs {
+      position: sticky;
+      top: 205px; /* height of story-strip, so it sits just below */
+  z-index: 1111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 10px 20px 20px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+:root{
+  --avatar-size: 42px;   /* visible avatar size */
+  --ring-thickness: 3px; /* thickness of colored story ring */
+  --badge-size: 22px;    /* like/badge size */
+}
+
+/* wrapper around avatar + badge */
+.image-wrapper{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Only for profiles with a story */
+.has-story {
+  padding: var(--ring-thickness);
+  background: linear-gradient(45deg,
+    #feda75 0%,
+    #fa7e1e 25%,
+    #d62976 50%,
+    #962fbf 75%,
+    #4f5bd5 100%);
+  border-radius: 50%;
+  box-sizing: content-box; /* ensure padding becomes the ring */
+}
+
+/* avatar image */
+.profile-img{
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white; /* white gap like Instagram */
+}
+
+/* badge holder */
+.like-icon{
+  position: absolute;
+  bottom: 5px;
+  right: 4px;
+  transform: translate(25%, 25%); /* moves badge partly outside the circle */
+  width: var(--badge-size);
+  height: var(--badge-size);
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* badge image inside white circle */
+.like-icon img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+
+
+.tab-group {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 6px;
+  color: #007bff;
+}
+
+.tab-underline {
+  height: 2px;
+  background-color: #007bff;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.trash .tab-icon {
+  width: 22px;
+  height: 22px;
+}
+
+ .viewer-tabs {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.viewer-tabs::before {
+  content: "";
+  position: absolute;
+  top: -10px; /* adjust height of bump */
+  left: 40%;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent; /* left slope */
+  border-right: 10px solid transparent; /* right slope */
+  border-bottom: 10px solid white; /* color of the bump */
+}
+
+.viewer-tabs {
+  position: sticky;
+  top: 204.9px;
+  z-index: 999;
+  background: white;
+  padding: 10px;
+  clip-path: polygon(
+    0 0,
+    50% 0,
+    calc(50% - 10px) 0,
+    50% - 10px 0,
+    50% 10px,
+    calc(50% + 10px) 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+.story,
+.viewers,
+.tab {
+  display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+.story:active,
+.viewers:active,
+.tab:active {
+  transform: scale(0.95);
+}
+
+
+.container {
+    max-width: 99.9%;
+    margin: auto;
+    padding: 1px;
+  }
+
+  /* Skeleton Base */
+  .skeleton {
+    background: #e6e6e6;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150px;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Layout mimic */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .stat-text {
+    width: 60px;
+    height: 16px;
+  }
+  .story-preview {
+    width: 90px;
+    height: 150px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .boost-btn {
+    width: 200px;
+    height: 20px;
+    margin: 20px 0;
+  }
+
+  .viewer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  .viewer-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .viewer-name {
+    width: 140px;
+    height: 14px;
+    margin-bottom: 5px;
+  }
+  .viewer-sub {
+    width: 100px;
+    height: 12px;
+  }
+
+  /* Hide content initially */
+  .hidden {
+    display: none;
+  }
+
+  /* Fade-in effect */
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Skeleton Loader -->
+  <div id="skeleton-container">
+    <div class="header">
+      <div class="skeleton stat-icon"></div>
+      <div class="skeleton stat-text"></div>
+    </div>
+
+    <div class="skeleton story-preview"></div>
+
+    <div class="skeleton boost-btn"></div>
+
+    <!-- Repeat skeleton viewer items -->
+    <div class="viewer">
+      <div class="skeleton viewer-pic"></div>
+      <div>
+        <div class="skeleton viewer-name"></div>
+        <div class="skeleton viewer-sub"></div>
+      </div>
+    </div>
+    <div class="viewer">
+      <div class="skeleton viewer-pic"></div>
+      <div>
+        <div class="skeleton viewer-name"></div>
+        <div class="skeleton viewer-sub"></div>
+      </div>
+    </div>
+    <div class="viewer">
+      <div class="skeleton viewer-pic"></div>
+      <div>
+        <div class="skeleton viewer-name"></div>
+        <div class="skeleton viewer-sub"></div>
+      </div>
+    </div>
+  </div>
+<!-- Actual Content -->
+  <div id="content" class="hidden">
+
+
+  <!-- Story Thumbnails -->
+ <div class="story-strip">
+  <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/instagram-settings-icon.png" alt="Left Icon" id="fullscreen-btn" class="top-left-icon" />
+  <a href="index.html"><img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/all-icons/x-919o2m0hea73deh80x64u2.png/x-b8u46hdovcz62tsfbgky7.png?_a=DATAg1AAZAA0" alt="Right Icon" class="top-right-icon" /></a>
+  
+  <div class="story" style="height: 120px; width: auto;">
+   <a href="stories.html"> <img id="myImage" src="https://exstasyclothing.com/profilezapp/image/1.jpg" alt="Story 1"   style="height:120px; width: auto;  bottom: 2px; object-fit:cover;" ></a> 
+    <div class="views" contenteditable="true">
+     <img src="https://i.imgur.com/c7HD2XX.png" alt="eye icon" style="width: 16px; vertical-align: middle; margin-right: 4px;">
+      1365
+    </div>
+  </div>
+
+  <div class="story" style="margin-top: 2%;">
+    <img  src="https://exstasyclothing.com/profilezapp/image/2.jpg" alt="Story 2">
+    <div class="views" contenteditable="true">
+      
+      
+    </div>
+  </div>
+
+
+</div>
+
+
+  <!-- Viewer Tab Navigation -->
+<div class="viewer-tabs">
+  <div class="tab-group">
+    <a href="stats.html" class="tab-link">
+    <div class="tab">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy6E57QJ_7_hMnkLf1FjY_I5yq4u5VIjppseMVF9JPzijQPIFJUdxE0GQS1fN0Ils5zVE&usqp=CAU" alt="Stats" class="tab-icon">
+    </div>
+    </a>
+    <div class="tab active">
+     <!-- https://i.ibb.co/TDTyVW4H/view.png -->
+      <img src="https://i.ibb.co/35gtTbvn/users-1.png" alt="Viewers" class="tab-icon">
+      
+      <span class="tab-label" contenteditable="true">1365</span>
+      <div class="tab-underline"></div>
+    </div>
+  </div>
+  <div class="tab trash">
+    <a href="https://exstasyclothing.com/profilezapp/" class="tab-link">
+    <img src="https://i.imgur.com/vmbREbw.png" alt="Delete" class="tab-icon"></a>
+  </div>
+</div>
+
+<div class="123" id="my-section">
+<!-- Boost Button -->
+  <div class="boost">
+    <img class="icon" src="https://i.ibb.co/s9V07jcJ/arrow-upward-icon-set-vector-260nw-2592513801.jpg" alt="Send" width="35" height="auto"> <span>Boost this story</span>
+  </div>
+
+  <!-- Viewers -->
+  <div class="section-title">Who viewed your story</div>
+
+  <!-- Viewers List -->
+  <div class="viewer">
+    <div class="viewer-info">
+    <!-- Avatar with story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/rPekbBW.jpeg" alt="User 1">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username" contenteditable="true">ashok kodiya </span>
+        <span class="name" contenteditable="true">ashok.akodiya.102</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/CRr3d19.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">shalaman khan</span>
+        <span class="name">sk62275113</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/UFYV4NF.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">rahul saini</span>
+        <span class="name">rahul_saini_0047</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/W7EGVcV.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">lakashya</span>
+        <span class="name">lakashya12300</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/KTbPp96.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">puja berwa</span>
+        <span class="name">itz_sukoon_mahadevj</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+  
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/ktvkweA.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">banwari bairwa</span>
+        <span class="name">banwari_bairwa047</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/GmRN3F1.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">aadil</span>
+        <span class="name">md_a_adil</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/K8wGaAq.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">shiv kunwal</span>
+        <span class="name">shiv_kunwal</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/H5HQS81.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">hansraj prajapt</span>
+        <span class="name">mobile_mahasagar_dudu</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/6K2abzM.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">kiran choudhary</span>
+        <span class="name">kiran_choudhary_1721</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/SuibtDH.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">prince</span>
+        <span class="name">itz_prince028_0</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/qeLvB1G.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">ravi regar</span>
+        <span class="name">Ravi4354</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/30nSdEl.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">_0047sukh</span>
+        <span class="name">0047sukh</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+   <div class="viewer">
+    <div class="viewer-info">
+      
+     <!-- Avatar without story ring -->
+<div class="image-wrapper has-story">
+  <img class="profile-img" src="https://i.imgur.com/E5beXTJ.jpeg" alt="User 2">
+  <div class="like-icon">
+    <img src="image/likes.png" alt="likes">
+  </div>
+</div>
+
+      <div class="viewer-details">
+        <span class="username">ramesha prajapat</span>
+        <span class="name">rameshapp7741</span>
+      </div>
+    </div>
+    <div class="viewer-actions">
+      <span class="icon">⋮</span>
+      <img class="icon" src="https://static.vecteezy.com/system/resources/previews/017/624/631/non_2x/paper-plane-line-icon-isolated-on-white-background-black-flat-thin-icon-on-modern-outline-style-linear-symbol-and-editable-stroke-simple-and-pixel-perfect-stroke-illustration-vector.jpg" alt="Send" width="25" height="auto">
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+ </div>
+
+</div>
+
+<script>
+  // Simulate 3-second loading
+  setTimeout(() => {
+    document.getElementById('skeleton-container').classList.add('hidden');
+    const content = document.getElementById('content');
+    content.classList.remove('hidden');
+    content.classList.add('fade-in');
+  }, 2000);
+</script>
+<script>
+  const btn = document.getElementById('fullscreen-btn');
+
+  btn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      // Enter fullscreen
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+        document.documentElement.webkitRequestFullscreen();
+      } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+        document.documentElement.msRequestFullscreen();
+      }
+      btn.textContent = 'Exit Fullscreen';
+    } else {
+      // Exit fullscreen
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+      }
+      btn.textContent = 'Go Fullscreen';
+    }
+  });
+
+  // Optional: update button text if user exits fullscreen via ESC or other means
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+      btn.textContent = 'Go Fullscreen';
+    } else {
+      btn.textContent = 'Exit Fullscreen';
+    }
+  });
+</script>
+
+<script>
+function updateImage() {
+  const img = document.getElementById("myImage");
+  const randomParam = new Date().getTime(); // or Math.random()
+  img.src = "https://exstasyclothing.com/profilezapp/image/1.jpg?v=" + randomParam;
+}
+</script>
+</body>
+</html>
