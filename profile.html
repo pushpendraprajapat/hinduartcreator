@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile</title>
+  <style>
+    /* For iOS Safari */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Android Chrome and others supporting standard property */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    /* HEADER */
+    .topbar {
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar .username {
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .topbar img.icon {
+      width: 22px;
+      margin-left: 14px;
+    }
+
+    /* PROFILE */
+    .profile-section {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+    }
+    .profile-pic-container {
+      position: relative;
+      width: 84px;
+      height: 84px;
+    }
+    .profile-pic {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+    }
+    .plus-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: white;
+      border-radius: 50%;
+      padding: 2px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .info {
+      margin-left: 16px;
+      flex: 1;
+    }
+    .name-line {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat span:first-child {
+      font-weight: bold;
+      display: block;
+    }
+
+    .bio {
+      padding: 0 16px;
+      font-size: 14px;
+      margin-top: -8px;
+    }
+
+    .buttons {
+      padding: 10px 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 14px;
+      text-align: center;
+      background: #efefef;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn.arrow::after {
+      content: '⌄';
+      
+      font-size: 19px;
+      padding-bottom: 12px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 6px 0;
+    }
+
+    .nav-tabs img {
+      width: 20px;
+      opacity: 0.6;
+    }
+
+    .nav-tabs .active img {
+      opacity: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 80px;
+    }
+
+    .grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+
+    /* Footer */
+    .footer {
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    .footer img {
+      width: 24px;
+      height: 24px;
+    }
+    .dashboard {
+  padding: 12px 16px;
+  background-color: #efefef;
+  border: 1px solid #ddd;
+  margin: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="topbar">
+    <div class="username" contenteditable="true">hindu_artcreator</div>
+    <div>
+      <img src="https://images.seeklogo.com/logo-png/48/2/threads-logo-png_seeklogo-489791.png" class="icon" alt="Threads">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828926.png" class="icon" alt="Post">
+     <a href="menu.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/2048px-Hamburger_icon.svg.png" class="icon" alt="Menu"></a>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="profile-section">
+    <div class="profile-pic-container">
+      <img src="https://i.ibb.co/hps8vwC/503570226-17906625231157799-5752227741181345417-n-modified.png" class="profile-pic" alt="Profile Picture">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" class="plus-icon" alt="Plus">
+    </div>
+    <div class="info">
+      <div class="name-line" contenteditable="true">Hindu Art Creator <small contenteditable="true">he/him</small></div>
+      <div class="stats">
+        <div class="stat"><span contenteditable="true">839</span>posts</div>
+        <div class="stat"><span contenteditable="true">2.5M</span>followers</div>
+        <div class="stat"><span contenteditable="true">3,710</span>following</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIO -->
+  <div class="bio">
+    <span style="color: grey;" contenteditable="true"> Art & Craft Store</span><br>
+    🎨 @hindu_artcreator अकाउंट बिक्री के लिए
+अगर आप कला प्रेमी हैं और इसे अपनाना चाहते हैं तो DM करें।
+सीधे संपर्क के लिए: whataap kare [9358010159]
+  </div>
+
+  <!-- PROFESSIONAL DASHBOARD -->
+<a href="dashboard.html">
+<div class="dashboard" style="color: black; text-decoration: none;">
+  <strong>Professional dashboard</strong><br>
+  <span contenteditable="true">3.7M views in the last 30 days.</span>
+</div></a>
+
+
+  <!-- BUTTONS -->
+  <div class="buttons">
+    <div class="btn">Edit profile</div>
+    <div class="btn">Share profile</div>
+   
+    
+  </div>
+
+  <!-- TABS -->
+  <div class="nav-tabs">
+    <div class="active">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQRAE82IohyeG_xeCVv-NOmvWhjUeyQOnmqIa678VyuGLUPHORUSD3Vw-CUNYRxm7cpeI&usqp=CAU" alt="Grid">
+    </div>
+    <div>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzafXPewDK-Ks8yO73WkQ4_AXYo4-IDE_h2w&s" alt="Reels">
+    </div>
+    <div>
+      <img src="https://www.transparentpng.com/download/user/gray-user-profile-icon-png-fP8Q1P.png" alt="Tagged">
+    </div>
+  </div>
+
+  <!-- POSTS GRID -->
+  <div class="grid">
+    <img src="https://pbs.twimg.com/profile_images/1917858352211591169/oQ5R33eB_400x400.jpg" alt="">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBGOC6xwjwTQtlon2_kRgbwBocz2LuPYaeiQ&s" alt="">
+    <img src="https://wonderwheelstore.com/wp-content/uploads/2024/03/Product-5.jpg" alt="">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhLlkq71QcNEpcPMnEy42ME0igZxkhjQHRCm3JrAUdEeYQpZaaW-tyTIGiVt-2bHMDXTc&usqp=CAU" alt="">
+    <img src="https://static.vecteezy.com/system/resources/previews/013/826/914/non_2x/shri-krishna-ji-decent-line-art-free-vector.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/f7/ea/59/f7ea59a5378c14c0d10fa4e2e31970fb.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/02/07/e4/0207e41fee5782cfe028df0ced1de21e.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/5a/4b/5d/5a4b5d90748c5c5b4e959ff2ff6c3f13.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e0/6c/a5/e06ca5510391d99fd99d5f2693a8911d.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c8/06/d5/c806d58879926807151297a162228544.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c2/56/a0/c256a004bd29c00b22211dd47b096691.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c0/1e/50/c01e50a0f4c8329a72395c683a635a60.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e3/11/6d/e3116d1cfb7325ba3c4234758cf9deff.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/2f/51/44/2f5144042d0b9e72a9963d752aa30cf8.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/f7/ea/59/f7ea59a5378c14c0d10fa4e2e31970fb.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/02/07/e4/0207e41fee5782cfe028df0ced1de21e.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/5a/4b/5d/5a4b5d90748c5c5b4e959ff2ff6c3f13.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e0/6c/a5/e06ca5510391d99fd99d5f2693a8911d.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c8/06/d5/c806d58879926807151297a162228544.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c2/56/a0/c256a004bd29c00b22211dd47b096691.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c0/1e/50/c01e50a0f4c8329a72395c683a635a60.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e3/11/6d/e3116d1cfb7325ba3c4234758cf9deff.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/2f/51/44/2f5144042d0b9e72a9963d752aa30cf8.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/f7/ea/59/f7ea59a5378c14c0d10fa4e2e31970fb.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/02/07/e4/0207e41fee5782cfe028df0ced1de21e.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/5a/4b/5d/5a4b5d90748c5c5b4e959ff2ff6c3f13.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e0/6c/a5/e06ca5510391d99fd99d5f2693a8911d.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c8/06/d5/c806d58879926807151297a162228544.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c2/56/a0/c256a004bd29c00b22211dd47b096691.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c0/1e/50/c01e50a0f4c8329a72395c683a635a60.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e3/11/6d/e3116d1cfb7325ba3c4234758cf9deff.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/2f/51/44/2f5144042d0b9e72a9963d752aa30cf8.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/f7/ea/59/f7ea59a5378c14c0d10fa4e2e31970fb.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/02/07/e4/0207e41fee5782cfe028df0ced1de21e.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/5a/4b/5d/5a4b5d90748c5c5b4e959ff2ff6c3f13.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e0/6c/a5/e06ca5510391d99fd99d5f2693a8911d.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c8/06/d5/c806d58879926807151297a162228544.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c2/56/a0/c256a004bd29c00b22211dd47b096691.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/c0/1e/50/c01e50a0f4c8329a72395c683a635a60.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e3/11/6d/e3116d1cfb7325ba3c4234758cf9deff.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/2f/51/44/2f5144042d0b9e72a9963d752aa30cf8.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/f7/ea/59/f7ea59a5378c14c0d10fa4e2e31970fb.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/02/07/e4/0207e41fee5782cfe028df0ced1de21e.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/5a/4b/5d/5a4b5d90748c5c5b4e959ff2ff6c3f13.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/e0/6c/a5/e06ca5510391d99fd99d5f2693a8911d.jpg" alt="">
+  </div>
+
+ <!-- Footer -->
+  <div class="footer">
+   <a href="index.html"> <img src="https://i.imgur.com/yTAw7he.png" alt="Home"></a>
+    <img src="https://i.imgur.com/kcuUSUv.png" alt="Search">
+    <img src="https://i.imgur.com/JTaIusd.png" alt="Add Post">
+    <img src="https://i.imgur.com/qnUbQOx.png" alt="Reels">
+    <a href="profile.html"><img src="https://i.ibb.co/hps8vwC/503570226-17906625231157799-5752227741181345417-n-modified.png" alt="Profile" style="border-radius: 20px; width: 28px; height: 28px;"></a>
+    
+  </div>
+
+</body>
+</html>

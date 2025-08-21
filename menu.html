@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings and Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+  <style>
+    /* For iOS Safari */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Android Chrome and others supporting standard property */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      font-weight: bold;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+    }
+
+    header img {
+      width: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+    }
+
+    .search-box {
+      padding: 12px 16px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background-color: #f3f3f3;
+    }
+
+    .section {
+      padding: 0 16px;
+      margin-top: 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .item-left img {
+      width: 20px;
+    }
+
+    .item-text {
+      font-size: 15px;
+    }
+
+    .meta-note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .meta-logo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .meta-logo img {
+      width: 40px;
+    }
+
+    /* Footer */
+    .footer {
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    .footer img {
+      width: 24px;
+      height: 24px;
+    }
+    .badge {
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+   <a href="profile.html"> <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back"></a>
+    Settings and activity
+  </header>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" placeholder="Search">
+  </div>
+
+  <!-- Your Account -->
+  <div class="section">
+    <div class="section-title">Your account</div>
+    <div class="item meta-logo">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Account">
+        <div>
+          <div class="item-text">Accounts Center</div>
+          <div class="meta-note">Password, security, personal details, ad preferences</div>
+        </div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="Meta" width="30">
+    </div>
+    <p class="meta-note" style="padding-left: 32px;">Manage your connected experiences and account settings across Meta technologies. <a href="#">Learn more</a></p>
+  </div>
+
+  <!-- How you use Instagram -->
+  <div class="section">
+    <div class="section-title">How you use Instagram</div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="Saved">
+        <div class="item-text">Saved</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/709/709592.png" alt="Archive">
+        <div class="item-text">Archive</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" alt="Activity">
+        <div class="item-text">Your activity</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png" alt="Notifications">
+        <div class="item-text">Notifications</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/1827/1827301.png" alt="Time">
+        <div class="item-text">Time management</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+  </div>
+
+  <!-- For professionals -->
+  <div class="section">
+    <div class="section-title">For professionals</div>
+
+    <div class="item">
+      <a href="dashboard.html"><div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Insights">
+        <div class="item-text">Insights</div>
+      </div></a>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png" alt="Verified">
+        <div class="item-text">Meta Verified</div>
+      </div>
+      <span class="badge">Not subscribed</span>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Schedule">
+        <div class="item-text">Scheduled content</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png" alt="Tools">
+        <div class="item-text">Business tools and controls</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888879.png" alt="Payments">
+        <div class="item-text">Ad payments</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" width="16" alt="arrow">
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+   <a href="index.html"> <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png" alt="Home"></a>
+    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Search">
+    <img src="https://www.seekpng.com/png/full/0-4932_facebook-messenger-icon-facebook-messenger-icon-png.png" alt="Messages">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" alt="Add">
+    <a href="profile.html"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="Profile"></a>
+    
+  </div>
+
+</body>
+</html>
